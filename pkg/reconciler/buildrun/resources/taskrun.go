@@ -243,6 +243,14 @@ func GenerateTaskRun(
 		}
 	}
 
+	// Merge Build and BuildRun Tolerations, giving preference to BuildRun Tolerations values
+	taskRunTolerations := mergeTolerations(build, buildRun)
+	if len(taskRunTolerations) > 0 {
+		expectedTaskRun.Spec.PodTemplate = &pod.PodTemplate{
+			Tolerations: taskRunTolerations,
+		}
+	}
+
 	// assign the annotations from the build strategy, filter out those that should not be propagated
 	taskRunAnnotations := make(map[string]string)
 	for key, value := range strategy.GetAnnotations() {
@@ -352,6 +360,18 @@ func effectiveTimeout(build *buildv1beta1.Build, buildRun *buildv1beta1.BuildRun
 	}
 
 	return nil
+}
+
+// mergeTolerations merges the values for Spec.Tolerations in the given Build and BuildRun objects, with values in the BuildRun object overriding values
+// in the Build object (if present).
+func mergeTolerations(build *buildv1beta1.Build, buildRun *buildv1beta1.BuildRun) []corev1.Toleration {
+	tolerations := build.Spec.Tolerations
+	for _, buildRunToleration := range buildRun.Spec.Tolerations {
+		for _, buildToleration := range build.Spec.Tolerations {
+
+		}
+	}
+	return tolerations
 }
 
 // isPropagatableAnnotation filters the last-applied-configuration annotation from kubectl because this would break the meaning of this annotation on the target object;
