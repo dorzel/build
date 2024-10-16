@@ -115,6 +115,8 @@ type BuildRunSpec struct {
 	//
 	// +optional
 	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
+
+	Tolerations []corev1.Toleration `json:"tolerations,omitempty"`
 }
 
 // BuildRunRequestedState defines the buildrun state the user can provide to override whatever is the current state.

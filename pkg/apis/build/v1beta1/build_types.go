@@ -78,6 +78,8 @@ const (
 	OutputTimestampNotValid BuildReason = "OutputTimestampNotValid"
 	// NodeSelectorNotValid indicates that the nodeSelector value is not valid
 	NodeSelectorNotValid BuildReason = "NodeSelectorNotValid"
+	// TolerationNotValid indicates that the Toleration value is not valid
+	TolerationNotValid BuildReason = "TolerationNotValid"
 
 	// AllValidationsSucceeded indicates a Build was successfully validated
 	AllValidationsSucceeded = "all validations succeeded"
@@ -183,6 +185,8 @@ type BuildSpec struct {
 	//
 	// +optional
 	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
+
+	Tolerations []corev1.Toleration `json:"tolerations,omitempty"`
 }
 
 // BuildVolume is a volume that will be mounted in build pod during build step
